@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { AuthSetup } from './components/AuthSetup';
-import { getCredentials, saveCredentials, Credentials } from './utils/storage';
-import { fetchTabs, TabData } from './utils/github';
+import { getCredentials, saveCredentials } from './utils/storage';
+import type { Credentials } from './utils/storage';
+import { fetchTabs } from './utils/github';
+import type { TabData } from './utils/github';
 
 export default function App() {
   const [creds, setCreds] = useState<Credentials | null>(getCredentials());
