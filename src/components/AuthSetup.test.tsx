@@ -1,15 +1,17 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AuthSetup } from './AuthSetup';
+import { redirectToGitHub } from '../utils/oauth';
+
+vi.mock('../utils/oauth', () => ({
+  redirectToGitHub: vi.fn(),
+}));
 
 describe('AuthSetup', () => {
-  it('calls onSave with input values', () => {
-    const handleSave = vi.fn();
-    render(<AuthSetup onSave={handleSave} />);
+  it('calls redirectToGitHub when login button is clicked', () => {
+    render(<AuthSetup />);
     
-    fireEvent.change(screen.getByLabelText(/github token/i), { target: { value: 'token123' } });
-    fireEvent.change(screen.getByLabelText(/gist id/i), { target: { value: 'gist123' } });
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    fireEvent.click(screen.getByRole('button', { name: /login with github/i }));
     
-    expect(handleSave).toHaveBeenCalledWith('token123', 'gist123');
+    expect(redirectToGitHub).toHaveBeenCalled();
   });
 });

@@ -1,30 +1,13 @@
-import { useState } from 'react';
+import { redirectToGitHub } from '../utils/oauth';
 
-interface Props {
-  onSave: (token: string, gistId: string) => void;
-}
-
-export function AuthSetup({ onSave }: Props) {
-  const [token, setToken] = useState('');
-  const [gistId, setGistId] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(token, gistId);
-  };
-
+export function AuthSetup() {
   return (
-    <form onSubmit={handleSubmit} className="auth-setup">
-      <h2>Setup Storage</h2>
-      <div>
-        <label htmlFor="token">GitHub Token</label>
-        <input id="token" type="password" value={token} onChange={e => setToken(e.target.value)} required />
-      </div>
-      <div>
-        <label htmlFor="gistId">Gist ID</label>
-        <input id="gistId" type="text" value={gistId} onChange={e => setGistId(e.target.value)} required />
-      </div>
-      <button type="submit">Save</button>
-    </form>
+    <div className="auth-setup">
+      <h2>Welcome to Tab Manager</h2>
+      <p>Store your tabs securely in your own GitHub Gists.</p>
+      <button onClick={redirectToGitHub} className="login-button">
+        Login with GitHub
+      </button>
+    </div>
   );
 }
