@@ -1,4 +1,5 @@
 const CLIENT_ID = 'Ov23liuT2CzlwbYhJnac';
+const CLIENT_SECRET = 'cce9d0dd56e0cafa321cd3c84e243e295692e0bc';
 const REDIRECT_URI = window.location.origin;
 
 export function redirectToGitHub() {
@@ -13,18 +14,18 @@ export async function exchangeCodeForToken(code: string, state: string): Promise
   const savedState = localStorage.getItem('oauth_state');
   if (state !== savedState) throw new Error('Invalid state');
 
-  // Using a CORS proxy because GitHub OAuth token endpoint doesn't support CORS for OAuth Apps
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token';
-  
-  const res = await fetch(proxyUrl, {
+  // We are now hitting GitHub directly with the client_secret.
+  // Note: GitHub's OAuth endpoint still might not support CORS for all browser origins.
+  // If this fails, we will need to reconsider a tiny backend function.
+  const res = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
     },
     body: JSON.stringify({
       client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
       code,
     })
   });
